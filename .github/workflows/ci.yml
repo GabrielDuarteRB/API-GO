@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push:
-    pull_request:
+  pull_request:
+    branches:
       - develop
   workflow_dispatch:
 
@@ -58,3 +58,21 @@ jobs:
 
       - name: Teste
         run: go test -tags=integration -count=1 ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.13
